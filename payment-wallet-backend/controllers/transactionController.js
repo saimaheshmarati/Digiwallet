@@ -6,7 +6,7 @@ import mongoose from "mongoose"; // Import mongoose for ObjectId conversion
 export const createTransaction = async (req, res) => {
     try {
         const { amount, type } = req.body;
-        const userId = req.user.id; // Get user ID from token
+        const userId = req.user._id; // Get user ID from token
 
         // Validate input
         if (!amount || amount <= 0 || !type || !["credit", "debit"].includes(type)) {
@@ -28,7 +28,11 @@ export const createTransaction = async (req, res) => {
         user.balance += type === "credit" ? amount : -amount;
         await user.save();
 
-        res.status(201).json({ message: "Transaction successful", transaction });
+        res.status(201).json({ 
+            message: "Transaction successful", 
+            transaction,
+            newBalance: user.balance
+        });
     } catch (error) {
         console.error("❌ Transaction Error:", error);
         res.status(500).json({ message: "Server error", error: error.message });
@@ -39,7 +43,7 @@ export const createTransaction = async (req, res) => {
 export const transferMoney = async (req, res) => {
     try {
         const { recipientId, amount } = req.body;
-        const senderId = req.user.id; 
+        const senderId = req.user._id; 
 
         if (!recipientId || !amount || amount <= 0) {
             return res.status(400).json({ message: "Invalid recipient or amount" });
@@ -76,7 +80,11 @@ export const transferMoney = async (req, res) => {
             type: "transfer",
         });
 
-        res.status(200).json({ message: "Transfer successful", transaction });
+        res.status(200).json({ 
+            message: "Transfer successful", 
+            transaction,
+            newBalance: sender.balance
+        });
     } catch (error) {
         console.error("❌ Transfer Error:", error);
         res.status(500).json({ message: "Server error", error: error.message });
@@ -86,14 +94,17 @@ export const transferMoney = async (req, res) => {
 // ---------------------- GET TRANSACTION HISTORY ----------------------
 export const getTransactionHistory = async (req, res) => {
     try {
-        const userId = req.user.id;
+        const userId = req.user._id;
 
         // Find transactions where user is sender, recipient, or involved in a transaction
         const transactions = await Transaction.find({
             $or: [{ senderId: userId }, { recipientId: userId }, { userId }]
-        }).sort({ createdAt: -1 });
+        }).sort({ createdAt: -1 }).limit(50);
 
-        res.status(200).json({ message: "Transaction history retrieved", transactions });
+        res.status(200).json({ 
+            message: "Transaction history retrieved", 
+            transactions 
+        });
     } catch (error) {
         console.error("❌ Transaction History Error:", error);
         res.status(500).json({ message: "Server error", error: error.message });
