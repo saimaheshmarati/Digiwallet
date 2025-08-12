@@ -5,8 +5,6 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
-import path from "path";
-import { fileURLToPath } from "url";
 
 // Route imports
 import authRoutes from "./routes/authRoutes.js";
@@ -26,7 +24,7 @@ const app = express();
 app.use(express.json({ limit: "10mb" }));
 app.use(cors());
 
-// API Routes
+// API Routes - These must come BEFORE any catch-all routes
 app.use("/api/auth", authRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/users", userRoutes);
@@ -34,14 +32,13 @@ app.use("/api/rewards", rewardRoutes);
 app.use("/api/bills", billPaymentRoutes);
 app.use("/api/payments", paymentRoutes);
 
-// Handle static files (React frontend build)
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-app.use(express.static(path.join(__dirname, "client")));
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "index.html"));
+// Health check endpoint
+app.get("/", (req, res) => {
+  res.json({ 
+    message: "Digital Wallet Backend API", 
+    status: "running",
+    timestamp: new Date().toISOString()
+  });
 });
 
 // MongoDB connection
