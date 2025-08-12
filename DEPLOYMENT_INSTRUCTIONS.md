@@ -59,12 +59,13 @@ Click "Create Web Service" and wait for deployment.
 - **Framework Preset**: Vite
 - **Root Directory**: `frontend`
 - **Build Command**: `npm run build`
-- **Output Directory**: `dist`
+- **Output Directory**: `dist` ⭐ (Important: Use 'dist' for Vite, not 'build')
+- **Install Command**: `npm install`
 
 ### **Step 4: Environment Variables**
 Add this environment variable:
 ```
-VITE_BACKEND_URL=https://your-backend-url.onrender.com/api
+VITE_BACKEND_URL=https://digiwallet-d58t.onrender.com/api
 ```
 
 ### **Step 5: Deploy**
@@ -92,7 +93,7 @@ Click "Deploy" and wait for completion.
 After deployment, you'll have:
 
 ### **Frontend**: `https://digiwallet-frontend.vercel.app`
-### **Backend**: `https://digital-wallet-backend.onrender.com`
+### **Backend**: `https://digiwallet-d58t.onrender.com` ✅ (Already deployed!)
 ### **GitHub**: `https://github.com/saimaheshmarati/Digiwallet`
 
 ## 📝 **Resume Entry**
@@ -105,6 +106,7 @@ Digital Wallet Application (Full-Stack)
 • Integrated payment gateways (Razorpay, Stripe) for secure financial transactions
 • Deployed frontend to Vercel and backend to Render with MongoDB Atlas database
 • Live Demo: https://digiwallet-frontend.vercel.app
+• Backend API: https://digiwallet-d58t.onrender.com
 • GitHub: https://github.com/saimaheshmarati/Digiwallet
 ```
 
@@ -122,6 +124,7 @@ Digital Wallet Application (Full-Stack)
 - **Database**: MongoDB Atlas free tier has 512MB storage
 - **Environment Variables**: Keep sensitive data secure
 - **Custom Domain**: Can be added later if needed
+- **Vite Output**: Always use `dist` directory, not `build`
 
 ## 🆘 **Troubleshooting**
 
@@ -134,6 +137,7 @@ Digital Wallet Application (Full-Stack)
 - Verify backend URL in environment variables
 - Check build logs in Vercel
 - Ensure API endpoints are accessible
+- **IMPORTANT**: Use `dist` as output directory for Vite projects
 
 ### **Database Issues**
 - Verify MongoDB Atlas connection
